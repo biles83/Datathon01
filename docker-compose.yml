@@ -6,6 +6,7 @@ services:
     container_name: app-contratacao
     ports:
       - "5000:5000"  # Porta da API Flask
+      - "8000:8000"  # Prometheus client
     depends_on:
       - prometheus
 

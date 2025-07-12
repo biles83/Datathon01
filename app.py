@@ -4,12 +4,16 @@ import time
 # import pickle
 import joblib
 import pandas as pd
+import logging
 
 # Inicialização do app Flask
 app = Flask(__name__)
 
 # Inicie um servidor Prometheus em uma porta diferente (por exemplo, 8000)
 start_http_server(8000)
+
+# Configuração básica de logging
+logging.basicConfig(level=logging.INFO)
 
 # Métricas
 REQUEST_TIME = Summary('request_processing_seconds',
@@ -43,6 +47,8 @@ def predict():
         # Faz a predição
         probabilidade = modelo.predict_proba(entrada)[0][1]
         classe = int(probabilidade >= 0.5)
+        logging.info(
+            f"Requisição recebida. Probabilidade: {probabilidade:.4f}, Classe: {classe}")
         LAST_PREDICTION.set(probabilidade)
         return jsonify({
             'probabilidade_contratacao': round(probabilidade, 4),
@@ -51,6 +57,7 @@ def predict():
 
     except Exception as e:
         ERROR_COUNT.inc()
+        logging.error(f"Erro na predição: {str(e)}")
         return jsonify({'erro': str(e)}), 400
 
 
