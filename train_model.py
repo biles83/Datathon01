@@ -10,7 +10,8 @@ Original file is located at
 import json
 import pandas as pd
 import numpy as np
-import pickle
+# import pickle
+import joblib
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.compose import ColumnTransformer
@@ -104,4 +105,5 @@ print(classification_report(y_test, y_pred))
 # =======================
 # joblib.dump(model, 'modelo_contratacao.pkl')
 filename = 'modelo_contratacao.pkl'
-pickle.dump(model, open(filename, 'wb'))
+# pickle.dump(model, open(filename, 'wb'))
+joblib.dump(model, 'modelo_contratacao.pkl')

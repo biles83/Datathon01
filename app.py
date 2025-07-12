@@ -1,13 +1,15 @@
 from flask import Flask, request, jsonify
-import pickle
+# import pickle
+import joblib
 import pandas as pd
 
 # Inicialização do app Flask
 app = Flask(__name__)
 
 # Carregamento do modelo
-with open("modelo_contratacao.pkl", "rb") as arquivo:
-    modelo = pickle.load(arquivo)
+# with open("modelo_contratacao.pkl", "rb") as arquivo:
+#    modelo = pickle.load(arquivo)
+modelo = joblib.load('modelo_contratacao.pkl')
 
 
 @app.route('/')
@@ -38,5 +40,8 @@ def predict():
 
 
 # Rodar a API localmente
+# if __name__ == '__main__':
+#    app.run(debug=True, host='0.0.0.0', port=5000)
+
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    app.run(host='0.0.0.0', port=5000)
