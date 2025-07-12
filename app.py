@@ -1,43 +1,42 @@
 from flask import Flask, request, jsonify
-import joblib
+import pickle
 import pandas as pd
 
-# Inicializa o app
+# Inicialização do app Flask
 app = Flask(__name__)
 
-# Carrega o modelo treinado
-modelo = joblib.load('modelo_contratacao.pkl')
+# Carregamento do modelo
+with open("modelo_contratacao.pkl", "rb") as arquivo:
+    modelo = pickle.load(arquivo)
 
 
 @app.route('/')
 def home():
-    return 'API de Previsão de Contratação - OK'
-
-# Endpoint de predição
+    return '✅ API de Previsão de Contratação está rodando.'
 
 
 @app.route('/predict', methods=['POST'])
 def predict():
     try:
-        # Recebe os dados em JSON
+        # Pega os dados enviados em JSON
         dados = request.get_json()
 
-        # Transforma em DataFrame
+        # Converte para DataFrame
         entrada = pd.DataFrame([dados])
 
-        # Realiza a predição
+        # Faz a predição
         probabilidade = modelo.predict_proba(entrada)[0][1]
         classe = int(probabilidade >= 0.5)
 
         return jsonify({
             'probabilidade_contratacao': round(probabilidade, 4),
-            'previsao': classe
+            'previsao': classe  # 0 ou 1
         })
 
     except Exception as e:
         return jsonify({'erro': str(e)}), 400
 
 
-# Executa localmente
+# Rodar a API localmente
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)
