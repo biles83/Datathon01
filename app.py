@@ -1,3 +1,4 @@
+from collections import deque
 from flask import Flask, request, jsonify
 from prometheus_client import start_http_server, Summary, Counter, Gauge
 import time
@@ -13,7 +14,23 @@ app = Flask(__name__)
 start_http_server(8000)
 
 # Configuração básica de logging
-logging.basicConfig(level=logging.INFO)
+# Configurações de log
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s [%(levelname)s] %(message)s',
+    handlers=[
+        logging.FileHandler("api.log"),
+        logging.StreamHandler()
+    ]
+)
+
+DRIFT_GAUGE = Gauge('prediction_drift_score',
+                    'Métrica de drift baseada na média móvel das previsões')
+
+# Janela deslizante para as probabilidades
+predicoes = deque(maxlen=100)
+
+MEDIA_TREINAMENTO = 0.62  # Exemplo: média da probabilidade no dataset de treino
 
 # Métricas
 REQUEST_TIME = Summary('request_processing_seconds',
@@ -40,16 +57,21 @@ def home():
 def predict():
     try:
         PREDICTION_COUNT.inc()
-        # Pega os dados enviados em JSON
         dados = request.get_json()
-        # Converte para DataFrame
         entrada = pd.DataFrame([dados])
-        # Faz a predição
         probabilidade = modelo.predict_proba(entrada)[0][1]
         classe = int(probabilidade >= 0.5)
-        logging.info(
-            f"Requisição recebida. Probabilidade: {probabilidade:.4f}, Classe: {classe}")
+
+        # Atualiza drift
+        predicoes.append(probabilidade)
+        media_atual = sum(predicoes) / len(predicoes)
+        drift_score = abs(media_atual - MEDIA_TREINAMENTO)
+        DRIFT_GAUGE.set(drift_score)
+
         LAST_PREDICTION.set(probabilidade)
+        logging.info(f"Recebida nova requisição: {dados}")
+        logging.info(
+            f"Probabilidade predita: {probabilidade}, Classe: {classe}")
         return jsonify({
             'probabilidade_contratacao': round(probabilidade, 4),
             'previsao': classe  # 0 ou 1
@@ -57,7 +79,7 @@ def predict():
 
     except Exception as e:
         ERROR_COUNT.inc()
-        logging.error(f"Erro na predição: {str(e)}")
+        logging.exception("Erro durante a predição")
         return jsonify({'erro': str(e)}), 400
 
 
