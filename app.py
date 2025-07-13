@@ -59,6 +59,25 @@ def predict():
         PREDICTION_COUNT.inc()
         dados = request.get_json()
         entrada = pd.DataFrame([dados])
+
+        # Validação de tipos esperados
+        tipos_esperados = {
+            "idade": int,
+            "tempo_experiencia": int,
+            "nivel_profissional": str,
+            "nivel_academico": str,
+            "nivel_ingles": str,
+            "nivel_espanhol": str,
+            "certificacoes": int
+        }
+
+        for campo, tipo in tipos_esperados.items():
+            if campo not in dados:
+                raise ValueError(f"Campo ausente: {campo}")
+            if not isinstance(dados[campo], tipo):
+                raise ValueError(
+                    f"Tipo inválido para '{campo}'. Esperado {tipo.__name__}, recebido {type(dados[campo]).__name__}")
+
         probabilidade = modelo.predict_proba(entrada)[0][1]
         classe = int(probabilidade >= 0.5)
 
