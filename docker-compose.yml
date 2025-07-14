@@ -1,30 +1,42 @@
 version: '3.8'
 
 services:
-  app:
-    build: .
+  app-monitorado:
+    build:
+      context: .
     container_name: app-contratacao
     ports:
-      - "5000:5000"  # Porta da API Flask
-      - "8000:8000"  # Prometheus client
-    depends_on:
-      - prometheus
-
-  prometheus:
-    image: prom/prometheus
-    container_name: prometheus
+      - "5000:5000"  # Flask API
+      - "8000:8000"  # Prometheus client export
+      - "9090:9090"  # Prometheus dashboard
+      - "3000:3000"  # Grafana
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
-    ports:
-      - "9090:9090"
+      - grafana-storage:/var/lib/grafana
+      - ./supervisord.conf:/etc/supervisord.conf
+      - ./entrypoint.sh:/entrypoint.sh
+    entrypoint: ["/bin/bash", "/entrypoint.sh"]
+    depends_on:
+      - grafana
+      - prometheus
 
   grafana:
     image: grafana/grafana
     container_name: grafana
     ports:
-      - "3000:3000"
+      - "3300:3000"  
     volumes:
       - grafana-storage:/var/lib/grafana
+    restart: unless-stopped
+
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    ports:
+      - "9390:9090"  
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    restart: unless-stopped
 
 volumes:
   grafana-storage:
