@@ -14,7 +14,7 @@ Este modelo ajuda a priorizar candidatos com mais chances reais de contratação
 Usa os dados dos candidatos (applicants.json), das vagas (vagas.json) e da prospecção (prospects.json).
 Para cada candidato de uma vaga, o modelo aprende quais características estavam mais presentes nos que foram contratados.
 
-🧩 Variáveis de entrada:
+🧩 Variáveis obrigatórias de entrada:
 •	Area de atuação: String
           TI
           Comercial
@@ -26,8 +26,6 @@ Para cada candidato de uma vaga, o modelo aprende quais características estavam
           Qualidade
           Marketing
           Outros
-•	Idade do candidato: Int
-•	Tempo de experiência: Int
 •	Nível de senioridade: String
           Desconhecido
           Sênior
@@ -73,7 +71,6 @@ Para cada candidato de uma vaga, o modelo aprende quais características estavam
           Fluente
           Básico
           Nenhum
-•	Certificações: Int
 
 📌 Variável target (saída):
 Se o candidato foi contratado ou não.

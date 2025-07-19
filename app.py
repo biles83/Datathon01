@@ -2,7 +2,6 @@ from collections import deque
 from flask import Flask, request, jsonify
 from prometheus_client import start_http_server, Summary, Counter, Gauge
 import time
-# import pickle
 import joblib
 import pandas as pd
 import logging
@@ -57,8 +56,6 @@ ERROR_COUNT = Counter('prediction_errors_total',
 LAST_PREDICTION = Gauge('last_prediction_value', 'Último valor predito')
 
 # Carregamento do modelo
-# with open("modelo_contratacao.pkl", "rb") as arquivo:
-#    modelo = pickle.load(arquivo)
 modelo = joblib.load('modelo_contratacao.pkl')
 
 
@@ -79,13 +76,11 @@ def predict():
 
         # Validação de tipos esperados
         tipos_esperados = {
-            "idade": int,
-            "tempo_experiencia": int,
+            "area_atuacao": str,
             "nivel_profissional": str,
             "nivel_academico": str,
             "nivel_ingles": str,
-            "nivel_espanhol": str,
-            "certificacoes": int
+            "nivel_espanhol": str
         }
 
         for campo, tipo in tipos_esperados.items():
@@ -118,10 +113,6 @@ def predict():
         logging.exception("Erro durante a predição")
         return jsonify({'erro': str(e)}), 400
 
-
-# Rodar a API localmente
-# if __name__ == '__main__':
-#    app.run(debug=True, host='0.0.0.0', port=5000)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)

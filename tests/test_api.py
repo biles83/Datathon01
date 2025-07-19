@@ -20,13 +20,10 @@ def get_auth_headers(username='admin', password='admin@123'):
 def test_predict_success(client):
     dados_validos = {
         "area_atuacao": "TI",
-        "idade": 30,
-        "tempo_experiencia": 10,
         "nivel_profissional": "Sênior",
         "nivel_academico": "Pós Graduação Completo",
         "nivel_ingles": "Avançado",
-        "nivel_espanhol": "Básico",
-        "certificacoes": 3
+        "nivel_espanhol": "Básico"
     }
 
     resposta = client.post(
@@ -67,14 +64,11 @@ def test_predict_missing_fields(client):
 
 def test_predict_invalid_type(client):
     dados_invalidos = {
-        "area_atuacao": "TI",
-        "idade": "trinta",
-        "tempo_experiencia": 5,
+        "area_atuacao": 1,
         "nivel_profissional": "Júnior",
         "nivel_academico": "Médio",
         "nivel_ingles": "Intermediário",
-        "nivel_espanhol": "Básico",
-        "certificacoes": 1
+        "nivel_espanhol": "Básico"
     }
 
     resposta = client.post(
@@ -94,13 +88,10 @@ def test_predict_invalid_type(client):
 def test_predict_multiple_requests(client):
     dados = {
         "area_atuacao": "TI",
-        "idade": 30,
-        "tempo_experiencia": 7,
-        "nivel_profissional": "Pleno",
-        "nivel_academico": "Ensino Superior Completo",
+        "nivel_profissional": "Sênior",
+        "nivel_academico": "Pós Graduação Completo",
         "nivel_ingles": "Avançado",
-        "nivel_espanhol": "Básico",
-        "certificacoes": 2
+        "nivel_espanhol": "Básico"
     }
 
     for _ in range(5):
