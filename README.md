@@ -101,8 +101,10 @@ Se o score for maior que 35%, previsão = 1.
 ## 📘 Documentação da API
 Esta API Flask serve um modelo de machine learning treinado para prever a probabilidade de contratação de candidatos com base em informações fornecidas.
 
-•	Autenticação
-Esta API não possui autenticação.
+•	Autenticação Básica HTTP
+Esta API utiliza autenticação básica HTTP. Para acessar qualquer um dos endpoints, você precisa fornecer um nome de usuário e senha válidos.
+User: admin
+Password: admin@123
 
 •	Endpoints
 - GET /

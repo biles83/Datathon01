@@ -6,9 +6,24 @@ import time
 import joblib
 import pandas as pd
 import logging
+from flask_httpauth import HTTPBasicAuth
 
 # Inicialização do app Flask
 app = Flask(__name__)
+app.config['JSON_SORT_KEYS'] = False
+
+auth = HTTPBasicAuth()
+USER_DATA = {
+    "admin": "admin@123"
+}
+
+
+@auth.verify_password
+def verify(username, password):
+    if not (username and password):
+        return False
+    return USER_DATA.get(username) == password
+
 
 # Inicie um servidor Prometheus em uma porta diferente (por exemplo, 8000)
 start_http_server(8000)
@@ -48,11 +63,13 @@ modelo = joblib.load('modelo_contratacao.pkl')
 
 
 @app.route('/')
+@auth.login_required
 def home():
     return '✅ API de Previsão de Contratação está rodando.'
 
 
 @app.route('/predict', methods=['POST'])
+@auth.login_required
 @REQUEST_TIME.time()
 def predict():
     try:
