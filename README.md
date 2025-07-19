@@ -78,7 +78,7 @@ Se o candidato foi contratado ou não.
 🎯 Resultado:
 - Um score entre 0 e 1 para cada prospect indicando a probabilidade de ser contratado.
 - Previsão: 1 (contratação) ou 0 (não contratação).
-Se o score for maior que 35%, previsão = 1.
+Se o score for maior ou igual a 40%, previsão = 1.
 
 ## Requisitos do Projeto - DATATHON
 • Treinamento do modelo preditivo: Treinamento realizado no fonte train_model.py ou Datathon.ipynb.
