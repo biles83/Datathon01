@@ -14,14 +14,66 @@ Este modelo ajuda a priorizar candidatos com mais chances reais de contratação
 Usa os dados dos candidatos (applicants.json), das vagas (vagas.json) e da prospecção (prospects.json).
 Para cada candidato de uma vaga, o modelo aprende quais características estavam mais presentes nos que foram contratados.
 
-🧩 Variáveis de entrada (features):
-•	Idade do candidato
-•	Tempo de experiência
-•	Nível de senioridade (nivel_profissional)
-•	Nível acadêmico
-•	Nível de inglês
-•	Nível de espanhol
-•	Certificações
+🧩 Variáveis de entrada:
+•	Area de atuação: String
+          TI
+          Comercial
+          Administrativa
+          Recursos Humanos
+          Financeira
+          Gestão
+          Jurídica
+          Qualidade
+          Marketing
+          Outros
+•	Idade do candidato: Int
+•	Tempo de experiência: Int
+•	Nível de senioridade: String
+          Desconhecido
+          Sênior
+          Líder
+          Pleno
+          Júnior
+          Analista
+          Especialista
+          Estagiário
+          Técnico de Nível Médio
+          Gerente
+•	Nível acadêmico: String
+          Ensino Superior Completo
+          Pós Graduação Completo
+          Ensino Médio Completo
+          Mestrado Completo
+          Ensino Superior Cursando
+          Pós Graduação Incompleto
+          Ensino Superior Incompleto
+          Ensino Técnico Completo
+          Pós Graduação Cursando
+          Ensino Técnico Cursando
+          Mestrado Incompleto
+          Ensino Fundamental Completo
+          Ensino Médio Incompleto
+          Mestrado Cursando
+          Doutorado Incompleto
+          Doutorado Completo
+          Doutorado Cursando
+          Ensino Médio Cursando
+          Ensino Técnico Incompleto
+          Ensino Fundamental Incompleto
+          Ensino Fundamental Cursando
+•	Nível de inglês: String
+          Intermediário
+          Avançado
+          Fluente
+          Básico
+          Nenhum
+•	Nível de espanhol: String
+          Intermediário
+          Avançado
+          Fluente
+          Básico
+          Nenhum
+•	Certificações: Int
 
 📌 Variável target (saída):
 Se o candidato foi contratado ou não.
@@ -29,6 +81,7 @@ Se o candidato foi contratado ou não.
 🎯 Resultado:
 - Um score entre 0 e 1 para cada prospect indicando a probabilidade de ser contratado.
 - Previsão: 1 (contratação) ou 0 (não contratação).
+Se o score for maior que 35%, previsão = 1.
 
 ## Requisitos do Projeto - DATATHON
 • Treinamento do modelo preditivo: Treinamento realizado no fonte train_model.py ou Datathon.ipynb.
@@ -60,13 +113,14 @@ Esta API não possui autenticação.
   Recebe os dados do candidato e retorna a probabilidade de contratação e a classe (0 ou 1).
   Exemplo de requisição:
     {
+      "area_atuacao": "TI",  
       "idade": 30,
-      "tempo_experiencia": 5,
-      "nivel_profissional": "Pleno",
-      "nivel_academico": "Graduacao",
-      "nivel_ingles": "Intermediario",
-      "nivel_espanhol": "Basico",
-      "certificacoes": 2
+      "tempo_experiencia": 10,
+      "nivel_profissional": "Sênior",
+      "nivel_academico": "Pós Graduação Completo",
+      "nivel_ingles": "Avançado",
+      "nivel_espanhol": "Básico",
+      "certificacoes": 3
     }
   Exemplo de resposta:
     {
@@ -155,7 +209,7 @@ Métricas      =>   http://localhost:8000/metrics
 API           =>   http://localhost:5000
 API           =>   http://localhost:5000/predict
 Prometheus    =>   http://localhost:9090/
-Grafana       =>   http://localhost:3300/
+Grafana       =>   http://localhost:3000/
 
 ## 🛠️ Deploy em nuvem AWS - EC2
 Passos pararealizar o deploy em nuvem AWS.
@@ -191,7 +245,7 @@ API =>             http://SEU_IP_PUBLICO:5000
 API_PPREDICAO =>   http://SEU_IP_PUBLICO:5000/PREDICT
 Prometheus =>	     http://SEU_IP_PUBLICO:9090
 Métricas =>	       http://SEU_IP_PUBLICO:8000/metrics
-Grafana	=>         http://SEU_IP_PUBLICO:3300
+Grafana	=>         http://SEU_IP_PUBLICO:3000
 
 ## ⚙️ Configurar com systemd (não obrigatório)
 Configurar a API para subir automaticamente quando iniciar a VM.

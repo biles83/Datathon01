@@ -7,36 +7,40 @@ services:
     container_name: app-contratacao
     ports:
       - "5000:5000"  # Flask API
-      - "8000:8000"  # Prometheus client export
-      - "9090:9090"  # Prometheus dashboard
-      - "3000:3000"  # Grafana
+      - "8000:8000"  # Prometheus client (ex: start_http_server)
     volumes:
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml
-      - grafana-storage:/var/lib/grafana
       - ./supervisord.conf:/etc/supervisord.conf
       - ./entrypoint.sh:/entrypoint.sh
     entrypoint: ["/bin/bash", "/entrypoint.sh"]
     depends_on:
-      - grafana
       - prometheus
-
-  grafana:
-    image: grafana/grafana
-    container_name: grafana
-    ports:
-      - "3300:3000"  
-    volumes:
-      - grafana-storage:/var/lib/grafana
-    restart: unless-stopped
+    networks:
+      - monitoramento
 
   prometheus:
     image: prom/prometheus
     container_name: prometheus
     ports:
-      - "9390:9090"  
+      - "9090:9090"  # Interface do Prometheus
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    networks:
+      - monitoramento
+    restart: unless-stopped
+
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    ports:
+      - "3000:3000"  # Interface do Grafana
+    volumes:
+      - grafana-storage:/var/lib/grafana
+    networks:
+      - monitoramento
     restart: unless-stopped
 
 volumes:
   grafana-storage:
+
+networks:
+  monitoramento:

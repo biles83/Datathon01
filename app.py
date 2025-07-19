@@ -79,7 +79,7 @@ def predict():
                     f"Tipo inválido para '{campo}'. Esperado {tipo.__name__}, recebido {type(dados[campo]).__name__}")
 
         probabilidade = modelo.predict_proba(entrada)[0][1]
-        classe = int(probabilidade >= 0.5)
+        classe = int(probabilidade >= 0.35)
 
         # Atualiza drift
         predicoes.append(probabilidade)

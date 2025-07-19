@@ -14,10 +14,11 @@ def client():
 
 def test_predict_success(client):
     dados_validos = {
-        "idade": 35,
+        "area_atuacao": "TI",
+        "idade": 30,
         "tempo_experiencia": 10,
         "nivel_profissional": "Sênior",
-        "nivel_academico": "Ensino Superior Completo",
+        "nivel_academico": "Pós Graduação Completo",
         "nivel_ingles": "Avançado",
         "nivel_espanhol": "Básico",
         "certificacoes": 3
@@ -60,6 +61,7 @@ def test_predict_missing_fields(client):
 
 def test_predict_invalid_type(client):
     dados_invalidos = {
+        "area_atuacao": "TI",
         "idade": "trinta",  # string ao invés de int
         "tempo_experiencia": 5,
         "nivel_profissional": "Júnior",
@@ -84,6 +86,7 @@ def test_predict_invalid_type(client):
 
 def test_predict_multiple_requests(client):
     dados = {
+        "area_atuacao": "TI",
         "idade": 30,
         "tempo_experiencia": 7,
         "nivel_profissional": "Pleno",

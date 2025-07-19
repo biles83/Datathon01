@@ -2,6 +2,6 @@ global:
   scrape_interval: 15s
 
 scrape_configs:
-  - job_name: 'flask_app'
+  - job_name: "flask_app"
     static_configs:
-      - targets: ['app:8000']
+      - targets: ["app-monitorado:8000"]
