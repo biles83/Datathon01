@@ -151,9 +151,11 @@ docker-compose up --build
 python -m pytest tests/
 ```
 ### 6. Sites
-Métricas => http://localhost:8001/metrics
-API => http://localhost:5000/enviar-dados
-Site de Predição => http://localhost:8501/
+Métricas      =>   http://localhost:8000/metrics
+API           =>   http://localhost:5000
+API           =>   http://localhost:5000/predict
+Prometheus    =>   http://localhost:9090/
+Grafana       =>   http://localhost:3300/
 
 ## 🛠️ Deploy em nuvem AWS - EC2
 Passos pararealizar o deploy em nuvem AWS.
@@ -185,11 +187,11 @@ cd Datathon01
 docker-compose up --build -d
 ```
 6. Acessar na Web (usando IP público da EC2)
-API =>           http://SEU_IP_PUBLICO:5000
-API_PPREDICAO => http://SEU_IP_PUBLICO:5000/PREDICT
-Prometheus =>	   http://SEU_IP_PUBLICO:9090
-Metrics =>	     http://SEU_IP_PUBLICO:8000/metrics
-Grafana	=>       http://SEU_IP_PUBLICO:3300
+API =>             http://SEU_IP_PUBLICO:5000
+API_PPREDICAO =>   http://SEU_IP_PUBLICO:5000/PREDICT
+Prometheus =>	     http://SEU_IP_PUBLICO:9090
+Métricas =>	       http://SEU_IP_PUBLICO:8000/metrics
+Grafana	=>         http://SEU_IP_PUBLICO:3300
 
 ## ⚙️ Configurar com systemd (não obrigatório)
 Configurar a API para subir automaticamente quando iniciar a VM.
@@ -227,12 +229,12 @@ sudo systemctl start app-contratacao
 sudo systemctl enable app-contratacao
 ```
 6. Comandos úteis
-Iniciar serviço	               - sudo systemctl start app-contratacao
-Parar serviço	                 - sudo systemctl stop app-contratacao
-Ver status	                   - sudo systemctl status app-contratacao
-Habilitar na inicialização	   - sudo systemctl enable app-contratacao
-Desabilitar na inicialização   - sudo systemctl disable app-contratacao
-Ver logs                       - journalctl -u app-contratacao -f
+Iniciar serviço	               -   sudo systemctl start app-contratacao
+Parar serviço	                 -   sudo systemctl stop app-contratacao
+Ver status	                   -   sudo systemctl status app-contratacao
+Habilitar na inicialização	   -   sudo systemctl enable app-contratacao
+Desabilitar na inicialização   -   sudo systemctl disable app-contratacao
+Ver logs                       -   journalctl -u app-contratacao -f
 
 ## 🚀 Deploy de atualizações contínuas
 1. Acesse a instância via SSH
@@ -255,9 +257,7 @@ docker-compose up --build -d   # Reconstrói e sobe em background
 
 ## 📖 Documentação do Projeto
 A documentação do projeto encontra-se distribuída em 2 arquivos conforme mostrado abaixo.
-
 - **`README.md`**: Documentação do projeto.
-
 ```bash
 DATATHON01/
   └── README.md
